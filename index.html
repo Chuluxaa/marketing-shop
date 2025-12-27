@@ -1,1 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Beauty Marketing Shop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+}
+header {
+  background: hotpink;
+  color: white;
+  padding: 25px;
+  text-align: center;
+}
+#shop {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+  padding: 25px;
+}
+.product {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.product img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+button {
+  margin-top: 8px;
+  padding: 8px 14px;
+  border: none;
+  background: hotpink;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button:hover {
+  background: deeppink;
+}
+#cart {
+  background: white;
+  margin: 20px;
+  padding: 15px;
+  border-radius: 12px;
+}
+footer {
+  background: #222;
+  color: white;
+  text-align: center;
+  padding: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>✨ Beauty Marketing Shop</h1>
+  <p>Products from real online stores (demo)</p>
+</header>
+
+<section id="shop"></section>
+
+<section id="cart">
+  <h2>🛒 Cart</h2>
+  <ul id="cart-items"></ul>
+  <p><strong>Total:</strong> $<span id="total">0</span></p>
+</section>
+
+<footer>
+  © 2025 Marketing Demo Shop
+</footer>
+
+<script>
+const products = [
+  {
+    name: "CeraVe Cleanser",
+    price: 15,
+    img: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9",
+    link: "https://www.amazon.com/"
+  },
+  {
+    name: "The Ordinary Serum",
+    price: 7,
+    img: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd",
+    link: "https://www.sephora.com/"
+  },
+  {
+    name: "Luxury Perfume",
+    price: 49,
+    img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539",
+    link: "https://www.fragrantica.com/"
+  },
+  {
+    name: "Matte Lipstick",
+    price: 10,
+    img: "https://images.unsplash.com/photo-1586495777744-4413f21062fa",
+    link: "https://www.maybelline.com/"
+  }
+];
+
+const shop = document.getElementById("shop");
+const cartItems = document.getElementById("cart-items");
+const totalEl = document.getElementById("total");
+
+let cart = [];
+let total = 0;
+
+products.forEach(p => {
+  const div = document.createElement("div");
+  div.className = "product";
+  div.innerHTML = `
+    <img src="${p.img}">
+    <h3>${p.name}</h3>
+    <p>$${p.price}</p>
+    <button onclick="addToCart('${p.name}', ${p.price})">Add to Cart</button>
+    <br><br>
+    <a href="${p.link}" target="_blank">View in Store</a>
+  `;
+  shop.appendChild(div);
+});
+
+function addToCart(name, price) {
+  cart.push({name, price});
+  total += price;
+  renderCart();
+}
+
+function renderCart() {
+  cartItems.innerHTML = "";
+  cart.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item.name + " - $" + item.price;
+    cartItems.appendChild(li);
+  });
+  totalEl.textContent = total;
+}
+</script>
+
+</body>
+</html>
 
