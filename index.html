@@ -24,34 +24,18 @@ footer{background:#222;color:#fff;text-align:center;padding:10px}
 </head>
 
 <body>
-
 <header>
-<h1>✨ Beauty Marketing Shop</h1>
-<p>Marketing Demo Store</p>
+  <h1>Beauty Market</h1>
+  <p>Top cosmetic products from trusted stores</p>
 </header>
 
-<div class="controls">
-<input id="search" placeholder="Search product...">
-<select id="category">
-<option value="all">All</option>
-<option value="skincare">Skin Care</option>
-<option value="makeup">Makeup</option>
-<option value="perfume">Perfume</option>
-</select>
+<div class="container">
+  <div class="products" id="products"></div>
 </div>
 
-<section id="shop"></section>
+<script src="script.js"></script>
 
-<section id="cart">
-<h2>🛒 Cart</h2>
-<div id="cart-items"></div>
-<p><b>Total:</b> $<span id="total">0</span></p>
-<button class="checkout" onclick="checkout()">Checkout (Demo)</button>
-</section>
-
-<footer>© 2025 Marketing Shop</footer>
-
-<script>
+<script
 // JSON-style product data
 const products=[
 {name:"CeraVe Cleanser",price:15,cat:"skincare",badge:"Best Seller",img:"https://images.unsplash.com/photo-1616394584738-fc6e612e71b9",link:"https://amazon.com"},
