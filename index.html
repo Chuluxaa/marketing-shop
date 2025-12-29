@@ -6,121 +6,231 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{margin:0;font-family:Arial;background:#f4f4f4}
-header{background:hotpink;color:#fff;text-align:center;padding:20px}
-.controls{display:flex;gap:10px;justify-content:center;margin:15px}
-.controls input,.controls select{padding:8px;border-radius:6px;border:none}
-#shop{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;padding:20px}
-.product{background:#fff;padding:15px;border-radius:12px;position:relative;text-align:center}
-.product img{width:100%;height:200px;object-fit:cover;border-radius:10px}
-.badge{position:absolute;top:10px;left:10px;background:red;color:#fff;padding:4px 8px;border-radius:6px;font-size:12px}
-button{padding:7px 12px;background:hotpink;border:none;color:#fff;border-radius:6px;cursor:pointer}
-#cart{background:#fff;margin:20px;padding:15px;border-radius:12px}
-.cart-item{display:flex;justify-content:space-between;margin-bottom:8px}
-footer{background:#222;color:#fff;text-align:center;padding:10px}
-.checkout{margin-top:10px;background:black}
-.stats{font-size:12px;color:#555}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Segoe UI,Arial}
+body{
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  color:#fff;
+  min-height:100vh;
+}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;width:100%;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(10px);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:15px 30px;z-index:1000;
+}
+nav h2{color:#00e0ff}
+nav div a{margin-left:20px;font-weight:600}
+
+/* SECTIONS */
+section{padding:120px 40px;display:none}
+section.active{display:block}
+
+/* AUTH */
+.auth-box{
+  max-width:400px;margin:auto;background:#111;
+  padding:30px;border-radius:12px;box-shadow:0 0 30px #000;
+}
+.auth-box h2{text-align:center;margin-bottom:20px}
+.auth-box input{
+  width:100%;padding:12px;margin-bottom:15px;
+  border:none;border-radius:8px;
+}
+.auth-box button{
+  width:100%;padding:12px;
+  background:#00e0ff;color:#000;
+  border:none;border-radius:8px;font-weight:bold;
+}
+
+/* PRODUCTS */
+.controls{
+  display:flex;gap:15px;margin-bottom:25px;flex-wrap:wrap;
+}
+.controls input,.controls select{
+  padding:10px;border-radius:8px;border:none;
+}
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:25px;
+}
+.card{
+  background:#111;border-radius:15px;
+  padding:15px;box-shadow:0 10px 30px #000;
+  display:flex;flex-direction:column;
+}
+.card img{
+  width:100%;height:170px;object-fit:cover;border-radius:10px;
+}
+.card h3{margin:10px 0}
+.badge{
+  background:#ff0080;padding:4px 8px;
+  border-radius:6px;font-size:12px;display:inline-block;
+}
+.card button{
+  margin-top:auto;padding:10px;
+  background:#00e0ff;border:none;border-radius:8px;
+}
+
+/* CART */
+.cart-item{
+  display:flex;justify-content:space-between;
+  margin-bottom:10px;background:#111;
+  padding:10px;border-radius:8px;
+}
+.cart-item span{font-size:14px}
+
+/* PROFILE */
+.profile-box{
+  max-width:500px;margin:auto;background:#111;
+  padding:25px;border-radius:12px;
+}
+
+/* FOOTER */
+footer{text-align:center;padding:20px;color:#aaa}
 </style>
 </head>
 
 <body>
-<header>
-  <h1>Beauty Market</h1>
-  <p>Top cosmetic products from trusted stores</p>
-</header>
 
-<div class="container">
-  <div class="products" id="products"></div>
-</div>
+<nav>
+  <h2>BeautyShop</h2>
+  <div>
+    <a onclick="showPage('home')">Home</a>
+    <a onclick="showPage('shop')">Shop</a>
+    <a onclick="showPage('cart')">Cart (<span id="cartCount">0</span>)</a>
+    <a onclick="showPage('profile')">Profile</a>
+    <a onclick="logout()">Logout</a>
+  </div>
+</nav>
 
-<script src="script.js"></script>
+<!-- LOGIN -->
+<section id="login" class="active">
+  <div class="auth-box">
+    <h2>Login / Register</h2>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Enter</button>
+  </div>
+</section>
 
-<script
-// JSON-style product data
+<!-- HOME -->
+<section id="home">
+  <h1>🔥 Premium Beauty Marketing Store</h1>
+  <p style="margin-top:15px;max-width:600px">
+    Discover trending beauty products from top online stores.
+  </p>
+</section>
+
+<!-- SHOP -->
+<section id="shop">
+  <div class="controls">
+    <input id="search" placeholder="Search product">
+    <select id="category">
+      <option value="all">All</option>
+      <option value="skincare">Skin Care</option>
+      <option value="makeup">Makeup</option>
+      <option value="perfume">Perfume</option>
+    </select>
+  </div>
+  <div class="grid" id="products"></div>
+</section>
+
+<!-- CART -->
+<section id="cart">
+  <h2>Your Cart</h2>
+  <div id="cartItems"></div>
+  <h3>Total: $<span id="total">0</span></h3>
+</section>
+
+<!-- PROFILE -->
+<section id="profile">
+  <div class="profile-box">
+    <h2>Account Profile</h2>
+    <p id="profileName"></p>
+  </div>
+</section>
+
+<footer>© 2025 Beauty Marketing Demo</footer>
+
+<script>
+/* AUTH */
+function login(){
+  const u=username.value;
+  if(!u)return alert("Enter username");
+  localStorage.setItem("user",u);
+  showPage('home');
+}
+function logout(){
+  localStorage.removeItem("user");
+  location.reload();
+}
+if(localStorage.getItem("user")){
+  document.getElementById("login").style.display="none";
+  showPage('home');
+}
+
+/* NAV */
+function showPage(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+/* PRODUCTS */
 const products=[
-{name:"CeraVe Cleanser",price:15,cat:"skincare",badge:"Best Seller",img:"https://images.unsplash.com/photo-1616394584738-fc6e612e71b9",link:"https://amazon.com"},
-{name:"The Ordinary Serum",price:7,cat:"skincare",badge:"Hot Deal",img:"https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd",link:"https://sephora.com"},
-{name:"Matte Lipstick",price:10,cat:"makeup",badge:"",img:"https://images.unsplash.com/photo-1586495777744-4413f21062fa",link:"https://maybelline.com"},
-{name:"Luxury Perfume",price:49,cat:"perfume",badge:"Best Seller",img:"https://images.unsplash.com/photo-1592945403244-b3fbafd7f539",link:"https://fragrantica.com"}
+ {n:"CeraVe Cleanser",p:15,c:"skincare",i:"https://images.unsplash.com/photo-1616394584738-fc6e612e71b9",l:"https://amazon.com"},
+ {n:"The Ordinary Serum",p:7,c:"skincare",i:"https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd",l:"https://sephora.com"},
+ {n:"Luxury Perfume",p:49,c:"perfume",i:"https://images.unsplash.com/photo-1592945403244-b3fbafd7f539",l:"https://fragrantica.com"},
+ {n:"Matte Lipstick",p:20,c:"makeup",i:"https://images.unsplash.com/photo-1586495777744-4413f21062fa",l:"https://maybelline.com"},
+ {n:"Glow Foundation",p:32,c:"makeup",i:"https://images.unsplash.com/photo-1608979048467-6194dabc6a3d",l:"https://nyxcosmetics.com"},
+ {n:"Hydrating Cream",p:22,c:"skincare",i:"https://images.unsplash.com/photo-1585238342028-4bbc9b33c3c3",l:"https://cerave.com"}
 ];
 
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
-let clicks=JSON.parse(localStorage.getItem("clicks"))||{};
+const cart=[];
+const grid=document.getElementById("products");
 
-const shop=document.getElementById("shop");
-const cartBox=document.getElementById("cart-items");
-const totalEl=document.getElementById("total");
+function render(){
+ grid.innerHTML="";
+ const s=search.value.toLowerCase();
+ const cat=category.value;
+ products.filter(p=>
+   (cat==="all"||p.c===cat)&&p.n.toLowerCase().includes(s)
+ ).forEach(p=>{
+   grid.innerHTML+=`
+   <div class="card">
+     <img src="${p.i}">
+     <span class="badge">${p.c}</span>
+     <h3>${p.n}</h3>
+     <p>$${p.p}</p>
+     <button onclick="add('${p.n}',${p.p})">Add to Cart</button>
+     <a href="${p.l}" target="_blank">View Store</a>
+   </div>`;
+ });
+}
+search.oninput=render;
+category.onchange=render;
+render();
 
-function renderProducts(list){
-shop.innerHTML="";
-list.forEach(p=>{
-const c=clicks[p.name]||0;
-shop.innerHTML+=`
-<div class="product">
-${p.badge?`<div class="badge">${p.badge}</div>`:""}
-<img src="${p.img}">
-<h3>${p.name}</h3>
-<p>$${p.price}</p>
-<button onclick="addToCart('${p.name}',${p.price})">Add to Cart</button><br>
-<a href="${p.link}" target="_blank" onclick="track('${p.name}')">View Store</a>
-<div class="stats">Clicks: ${c}</div>
-</div>`;
-});
+/* CART */
+function add(n,p){
+ cart.push({n,p});
+ updateCart();
+}
+function updateCart(){
+ cartItems.innerHTML="";
+ let t=0;
+ cart.forEach(i=>{
+   t+=i.p;
+   cartItems.innerHTML+=`<div class="cart-item"><span>${i.n}</span><span>$${i.p}</span></div>`;
+ });
+ total.innerText=t;
+ cartCount.innerText=cart.length;
 }
 
-function track(name){
-clicks[name]=(clicks[name]||0)+1;
-localStorage.setItem("clicks",JSON.stringify(clicks));
-}
-
-function addToCart(name,price){
-const i=cart.find(x=>x.name===name);
-i?i.qty++:cart.push({name,price,qty:1});
-saveCart();
-}
-
-function saveCart(){
-localStorage.setItem("cart",JSON.stringify(cart));
-renderCart();
-}
-
-function renderCart(){
-cartBox.innerHTML="";
-let total=0;
-cart.forEach(i=>{
-total+=i.price*i.qty;
-cartBox.innerHTML+=`
-<div class="cart-item">
-${i.name} x${i.qty}
-<button onclick="remove('${i.name}')">-</button>
-</div>`;
-});
-totalEl.textContent=total;
-}
-
-function remove(name){
-const i=cart.find(x=>x.name===name);
-i.qty--;
-if(i.qty<=0)cart=cart.filter(x=>x!==i);
-saveCart();
-}
-
-function checkout(){
-alert("Payment successful (DEMO)");
-cart=[];
-saveCart();
-}
-
-document.getElementById("search").oninput=e=>{
-renderProducts(products.filter(p=>p.name.toLowerCase().includes(e.target.value.toLowerCase())));
-};
-
-document.getElementById("category").onchange=e=>{
-renderProducts(e.target.value==="all"?products:products.filter(p=>p.cat===e.target.value));
-};
-
-renderProducts(products);
-renderCart();
+/* PROFILE */
+profileName.innerText="Logged in as: "+localStorage.getItem("user");
 </script>
 
 </body>
