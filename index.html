@@ -2,105 +2,141 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>NovaMarket – Everything in One Place</title>
+<title>NovaMarket – Modern Online Marketplace</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{box-sizing:border-box;font-family:Segoe UI,Arial}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 body{
-margin:0;
-background:linear-gradient(135deg,#f8fafc,#eef2f7);
-color:#222;
+background:linear-gradient(135deg,#0f172a,#020617);
+color:#fff;
+overflow-x:hidden;
 }
 
 /* NAV */
 nav{
-position:sticky;top:0;z-index:100;
+position:fixed;top:0;width:100%;z-index:100;
 display:flex;justify-content:space-between;
-padding:15px 30px;
-background:#111;color:#fff;
+padding:18px 40px;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(12px);
 }
 nav a{
 color:#fff;text-decoration:none;
-margin:0 12px;padding:8px 14px;
-border-radius:6px;transition:.25s;
+margin-left:18px;
+padding:8px 14px;border-radius:8px;
+transition:.3s;
 }
-nav a:hover{background:#4f46e5}
+nav a:hover{background:#6366f1}
 
-/* SECTIONS */
-section{padding:40px;display:none}
+/* HERO */
+.hero{
+height:100vh;
+display:flex;align-items:center;justify-content:center;
+text-align:center;
+background:
+radial-gradient(circle at top,#6366f1,transparent 60%),
+linear-gradient(135deg,#020617,#020617);
+}
+.hero h1{font-size:60px;margin-bottom:15px}
+.hero p{font-size:20px;color:#c7d2fe}
+
+/* CATEGORY */
+.categories{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:25px;padding:60px;
+}
+.cat{
+background:rgba(255,255,255,.08);
+padding:30px;border-radius:20px;
+text-align:center;
+backdrop-filter:blur(8px);
+transition:.3s;
+cursor:pointer;
+}
+.cat:hover{transform:translateY(-10px);background:rgba(99,102,241,.4)}
+
+/* SHOP */
+section{padding-top:120px;display:none}
 section.active{display:block}
 
-/* HOME */
-#home{text-align:center}
-#home h1{font-size:46px;margin-bottom:10px}
-#home p{font-size:18px;color:#555}
-
-/* CONTROLS */
-.controls{
-display:flex;gap:15px;margin-bottom:25px;flex-wrap:wrap
-}
-.controls input,.controls select{
-padding:10px;border-radius:8px;
-border:1px solid #ccc
-}
-
-/* PRODUCTS */
 .products{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:22px
+grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+gap:30px;padding:40px;
 }
 .card{
-background:#fff;
-padding:15px;border-radius:14px;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-transition:.3s
+background:rgba(255,255,255,.08);
+border-radius:20px;
+padding:15px;
+backdrop-filter:blur(10px);
+transition:.3s;
 }
-.card:hover{transform:translateY(-6px)}
+.card:hover{transform:translateY(-10px)}
 .card img{
 width:100%;height:180px;
-object-fit:cover;border-radius:12px
-}
-.badge{
-display:inline-block;
-padding:4px 8px;
-border-radius:6px;
-font-size:12px;
-margin:6px 0;
-background:#e0e7ff;color:#3730a3
+object-fit:cover;border-radius:15px
 }
 .card button{
-margin-top:10px;
-width:100%;
-padding:9px;
-border:none;border-radius:8px;
-background:#4f46e5;
-color:#fff;font-weight:600;
-cursor:pointer
+margin-top:10px;width:100%;
+padding:10px;border:none;
+border-radius:10px;
+background:#6366f1;color:#fff;
+cursor:pointer;font-weight:600
 }
 
-/* CART */
-#cart{
-position:fixed;right:0;top:0;
-width:320px;height:100%;
-background:#111;color:#fff;
-padding:20px;overflow:auto
+/* FLOATING CART */
+.cart-btn{
+position:fixed;
+right:25px;bottom:25px;
+background:#6366f1;
+width:65px;height:65px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:26px;
+cursor:pointer;
+box-shadow:0 10px 30px rgba(99,102,241,.6);
+}
+.cart-count{
+position:absolute;
+top:-6px;right:-6px;
+background:red;color:#fff;
+width:22px;height:22px;
+font-size:13px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* CART MODAL */
+.modal{
+position:fixed;inset:0;
+background:rgba(0,0,0,.6);
+display:none;
+align-items:center;
+justify-content:center;
+}
+.modal.active{display:flex}
+.modal-box{
+background:#020617;
+width:360px;
+padding:25px;
+border-radius:20px;
 }
 .cart-item{
-display:flex;justify-content:space-between;
-align-items:center;margin-bottom:12px
+display:flex;
+justify-content:space-between;
+margin:10px 0;
 }
 .cart-item button{
-background:#4f46e5;border:none;
-color:#fff;padding:4px 8px;
-border-radius:4px;cursor:pointer
-}
-
-/* FOOTER */
-footer{
-text-align:center;padding:20px;
-background:#111;color:#fff
+background:#6366f1;border:none;
+color:#fff;border-radius:6px;
+padding:3px 8px;
+cursor:pointer;
 }
 </style>
 </head>
@@ -108,119 +144,114 @@ background:#111;color:#fff
 <body>
 
 <nav>
-<div><strong>🛍️ NovaMarket</strong></div>
+<strong>🛍️ NovaMarket</strong>
 <div>
-<a onclick="showPage('home')">Home</a>
-<a onclick="showPage('shop')">Shop</a>
+<a onclick="go('home')">Home</a>
+<a onclick="go('shop')">Shop</a>
 </div>
 </nav>
 
+<!-- HOME -->
 <section id="home" class="active">
+<div class="hero">
+<div>
 <h1>NovaMarket</h1>
-<p>Everything you need — Tech, Beauty, Gifts, Toys & More</p>
-</section>
-
-<section id="shop">
-<div class="controls">
-<input id="search" placeholder="Search products">
-<select id="category">
-<option value="all">All Categories</option>
-<option value="Beauty">Beauty</option>
-<option value="Tech">Tech</option>
-<option value="Gaming">Gaming</option>
-<option value="Accessories">Accessories</option>
-<option value="Toys">Toys</option>
-<option value="Souvenirs">Souvenirs</option>
-</select>
+<p>Tech • Beauty • Gaming • Toys • Accessories</p>
 </div>
-<div class="products" id="productList"></div>
+</div>
+
+<div class="categories">
+<div class="cat" onclick="go('shop')">💻 Tech</div>
+<div class="cat" onclick="go('shop')">💄 Beauty</div>
+<div class="cat" onclick="go('shop')">🎮 Gaming</div>
+<div class="cat" onclick="go('shop')">🧸 Toys</div>
+</div>
 </section>
 
-<div id="cart">
-<h3>🛒 Cart</h3>
+<!-- SHOP -->
+<section id="shop">
+<div class="products" id="products"></div>
+</section>
+
+<!-- CART BUTTON -->
+<div class="cart-btn" onclick="toggleCart()">
+🛒
+<div class="cart-count" id="cartCount">0</div>
+</div>
+
+<!-- CART MODAL -->
+<div class="modal" id="cartModal">
+<div class="modal-box">
+<h3>🛒 Your Cart</h3>
 <div id="cartItems"></div>
 <p>Total: $<span id="total">0</span></p>
+<button onclick="toggleCart()">Close</button>
+</div>
 </div>
 
-<footer>© 2025 NovaMarket</footer>
-
 <script>
-/* DATA */
-const categories=["Beauty","Tech","Gaming","Accessories","Toys","Souvenirs"];
 const products=[];
+const cart={};
 let id=1;
-categories.forEach(cat=>{
+["Tech","Beauty","Gaming","Toys","Accessories"].forEach(c=>{
 for(let i=1;i<=20;i++){
 products.push({
 id:id++,
-name:`${cat} Product ${i}`,
-category:cat,
+name:`${c} Product ${i}`,
 price:Math.floor(Math.random()*90)+10,
 img:`https://picsum.photos/400/300?random=${id}`
 });
 }
 });
 
-const cart={};
-
-/* NAV */
-function showPage(p){
+function go(p){
 document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
 document.getElementById(p).classList.add("active");
+window.scrollTo(0,0);
 }
 
-/* RENDER */
 function renderProducts(){
-const list=document.getElementById("productList");
-list.innerHTML="";
-const s=search.value.toLowerCase();
-const c=category.value;
-products.filter(p=>
-(p.name.toLowerCase().includes(s)) &&
-(c==="all"||p.category===c)
-).forEach(p=>{
-list.innerHTML+=`
+productsEl.innerHTML="";
+products.forEach(p=>{
+productsEl.innerHTML+=`
 <div class="card">
 <img src="${p.img}">
-<span class="badge">${p.category}</span>
 <h4>${p.name}</h4>
 <p>$${p.price}</p>
-<button onclick="addToCart(${p.id})">Add to Cart</button>
+<button onclick="add(${p.id})">Add to Cart</button>
 </div>`;
 });
 }
 
-/* CART */
-function addToCart(id){
+function add(id){
 cart[id]=(cart[id]||0)+1;
-renderCart();
+updateCart();
 }
-function changeQty(id,d){
-cart[id]+=d;
-if(cart[id]<=0) delete cart[id];
-renderCart();
-}
-function renderCart(){
+
+function updateCart(){
 cartItems.innerHTML="";
-let t=0;
-for(let id in cart){
-const p=products.find(x=>x.id==id);
-t+=p.price*cart[id];
+let t=0,count=0;
+for(let i in cart){
+const p=products.find(x=>x.id==i);
+t+=p.price*cart[i];
+count+=cart[i];
 cartItems.innerHTML+=`
 <div class="cart-item">
-<span>${p.name} (${cart[id]})</span>
+<span>${p.name} (${cart[i]})</span>
 <div>
-<button onclick="changeQty(${id},-1)">-</button>
-<button onclick="changeQty(${id},1)">+</button>
+<button onclick="cart[i]--;updateCart()">-</button>
+<button onclick="cart[i]++;updateCart()">+</button>
 </div>
 </div>`;
 }
+cartCount.innerText=count;
 total.innerText=t;
 }
 
-/* INIT */
-search.oninput=renderProducts;
-category.onchange=renderProducts;
+function toggleCart(){
+cartModal.classList.toggle("active");
+}
+
 renderProducts();
 </script>
 
