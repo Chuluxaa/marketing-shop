@@ -6,165 +6,133 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-}
-header {
-  background: hotpink;
-  color: white;
-  padding: 20px;
-  text-align: center;
-}
-.controls {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin: 15px;
-}
-.controls input, .controls select {
-  padding: 8px;
-  border-radius: 6px;
-  border: none;
-}
-#shop {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-.product {
-  background: white;
-  padding: 15px;
-  border-radius: 12px;
-  text-align: center;
-}
-.product img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-button {
-  padding: 7px 12px;
-  margin-top: 6px;
-  background: hotpink;
-  border: none;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-}
-#cart {
-  background: white;
-  margin: 20px;
-  padding: 15px;
-  border-radius: 12px;
-}
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-footer {
-  background: #222;
-  color: white;
-  text-align: center;
-  padding: 10px;
-}
+body{margin:0;font-family:Arial;background:#f4f4f4}
+header{background:hotpink;color:#fff;text-align:center;padding:20px}
+.controls{display:flex;gap:10px;justify-content:center;margin:15px}
+.controls input,.controls select{padding:8px;border-radius:6px;border:none}
+#shop{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;padding:20px}
+.product{background:#fff;padding:15px;border-radius:12px;position:relative;text-align:center}
+.product img{width:100%;height:200px;object-fit:cover;border-radius:10px}
+.badge{position:absolute;top:10px;left:10px;background:red;color:#fff;padding:4px 8px;border-radius:6px;font-size:12px}
+button{padding:7px 12px;background:hotpink;border:none;color:#fff;border-radius:6px;cursor:pointer}
+#cart{background:#fff;margin:20px;padding:15px;border-radius:12px}
+.cart-item{display:flex;justify-content:space-between;margin-bottom:8px}
+footer{background:#222;color:#fff;text-align:center;padding:10px}
+.checkout{margin-top:10px;background:black}
+.stats{font-size:12px;color:#555}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>✨ Beauty Marketing Shop</h1>
-  <p>Products from real online stores</p>
+<h1>✨ Beauty Marketing Shop</h1>
+<p>Marketing Demo Store</p>
 </header>
 
 <div class="controls">
-  <input type="text" id="search" placeholder="Search product...">
-  <select id="category">
-    <option value="all">All</option>
-    <option value="skincare">Skin Care</option>
-    <option value="makeup">Makeup</option>
-    <option value="perfume">Perfume</option>
-  </select>
+<input id="search" placeholder="Search product...">
+<select id="category">
+<option value="all">All</option>
+<option value="skincare">Skin Care</option>
+<option value="makeup">Makeup</option>
+<option value="perfume">Perfume</option>
+</select>
 </div>
 
 <section id="shop"></section>
 
 <section id="cart">
-  <h2>🛒 Cart</h2>
-  <div id="cart-items"></div>
-  <p><strong>Total:</strong> $<span id="total">0</span></p>
+<h2>🛒 Cart</h2>
+<div id="cart-items"></div>
+<p><b>Total:</b> $<span id="total">0</span></p>
+<button class="checkout" onclick="checkout()">Checkout (Demo)</button>
 </section>
 
-<footer>
-  © 2025 Marketing Demo Shop
-</footer>
+<footer>© 2025 Marketing Shop</footer>
 
 <script>
-const products = [
-  {name:"CeraVe Cleanser", price:15, cat:"skincare", img:"https://images.unsplash.com/photo-1616394584738-fc6e612e71b9", link:"https://amazon.com"},
-  {name:"The Ordinary Serum", price:7, cat:"skincare", img:"https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd", link:"https://sephora.com"},
-  {name:"Matte Lipstick", price:10, cat:"makeup", img:"https://images.unsplash.com/photo-1586495777744-4413f21062fa", link:"https://maybelline.com"},
-  {name:"Luxury Perfume", price:49, cat:"perfume", img:"https://images.unsplash.com/photo-1592945403244-b3fbafd7f539", link:"https://fragrantica.com"}
+// JSON-style product data
+const products=[
+{name:"CeraVe Cleanser",price:15,cat:"skincare",badge:"Best Seller",img:"https://images.unsplash.com/photo-1616394584738-fc6e612e71b9",link:"https://amazon.com"},
+{name:"The Ordinary Serum",price:7,cat:"skincare",badge:"Hot Deal",img:"https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd",link:"https://sephora.com"},
+{name:"Matte Lipstick",price:10,cat:"makeup",badge:"",img:"https://images.unsplash.com/photo-1586495777744-4413f21062fa",link:"https://maybelline.com"},
+{name:"Luxury Perfume",price:49,cat:"perfume",badge:"Best Seller",img:"https://images.unsplash.com/photo-1592945403244-b3fbafd7f539",link:"https://fragrantica.com"}
 ];
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+let clicks=JSON.parse(localStorage.getItem("clicks"))||{};
 
-const shop = document.getElementById("shop");
-const cartBox = document.getElementById("cart-items");
-const totalEl = document.getElementById("total");
+const shop=document.getElementById("shop");
+const cartBox=document.getElementById("cart-items");
+const totalEl=document.getElementById("total");
 
-function renderProducts(list) {
-  shop.innerHTML = "";
-  list.forEach(p => {
-    shop.innerHTML += `
-      <div class="product">
-        <img src="${p.img}">
-        <h3>${p.name}</h3>
-        <p>$${p.price}</p>
-        <button onclick='addToCart("${p.name}", ${p.price})'>Add to Cart</button><br>
-        <a href="${p.link}" target="_blank">View Store</a>
-      </div>`;
-  });
+function renderProducts(list){
+shop.innerHTML="";
+list.forEach(p=>{
+const c=clicks[p.name]||0;
+shop.innerHTML+=`
+<div class="product">
+${p.badge?`<div class="badge">${p.badge}</div>`:""}
+<img src="${p.img}">
+<h3>${p.name}</h3>
+<p>$${p.price}</p>
+<button onclick="addToCart('${p.name}',${p.price})">Add to Cart</button><br>
+<a href="${p.link}" target="_blank" onclick="track('${p.name}')">View Store</a>
+<div class="stats">Clicks: ${c}</div>
+</div>`;
+});
 }
 
-function addToCart(name, price) {
-  const item = cart.find(i => i.name === name);
-  if(item) item.qty++;
-  else cart.push({name, price, qty:1});
-  saveCart();
+function track(name){
+clicks[name]=(clicks[name]||0)+1;
+localStorage.setItem("clicks",JSON.stringify(clicks));
 }
 
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
+function addToCart(name,price){
+const i=cart.find(x=>x.name===name);
+i?i.qty++:cart.push({name,price,qty:1});
+saveCart();
 }
 
-function renderCart() {
-  cartBox.innerHTML = "";
-  let total = 0;
-  cart.forEach(i => {
-    total += i.price * i.qty;
-    cartBox.innerHTML += `
-      <div class="cart-item">
-        ${i.name} x${i.qty}
-        <button onclick="i.qty--; if(i.qty<=0) cart=cart.filter(x=>x!==i); saveCart()">-</button>
-      </div>`;
-  });
-  totalEl.textContent = total;
+function saveCart(){
+localStorage.setItem("cart",JSON.stringify(cart));
+renderCart();
 }
 
-document.getElementById("search").oninput = e => {
-  const val = e.target.value.toLowerCase();
-  renderProducts(products.filter(p => p.name.toLowerCase().includes(val)));
+function renderCart(){
+cartBox.innerHTML="";
+let total=0;
+cart.forEach(i=>{
+total+=i.price*i.qty;
+cartBox.innerHTML+=`
+<div class="cart-item">
+${i.name} x${i.qty}
+<button onclick="remove('${i.name}')">-</button>
+</div>`;
+});
+totalEl.textContent=total;
+}
+
+function remove(name){
+const i=cart.find(x=>x.name===name);
+i.qty--;
+if(i.qty<=0)cart=cart.filter(x=>x!==i);
+saveCart();
+}
+
+function checkout(){
+alert("Payment successful (DEMO)");
+cart=[];
+saveCart();
+}
+
+document.getElementById("search").oninput=e=>{
+renderProducts(products.filter(p=>p.name.toLowerCase().includes(e.target.value.toLowerCase())));
 };
 
-document.getElementById("category").onchange = e => {
-  renderProducts(e.target.value === "all" ? products : products.filter(p => p.cat === e.target.value));
+document.getElementById("category").onchange=e=>{
+renderProducts(e.target.value==="all"?products:products.filter(p=>p.cat===e.target.value));
 };
 
 renderProducts(products);
